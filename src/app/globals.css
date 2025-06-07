@@ -2,25 +2,107 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #7c9ebf;
+  --text-primary: #7c9ebf;
+  --card-background: #f7f7f7;
+  --card-text-primary: rgb(155, 166, 179);
+  --card-text-secondary: rgb(124, 158, 191);
+  --card-border: rgba(86, 101, 116, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #000;
+    --foreground: #CDC9FF;
+    --text-primary: #CDC9FF;
+    --card-background: #0a0a0a;
+    --card-border: rgba(122, 119, 153, 0.1);
+    --card-text-primary: rgb(155, 166, 179);
+    --card-text-secondary: rgb(205, 201, 255);
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--text-primary);
+  --color-card-background: var(--card-background);
+  --color-card-text-primary: var(--card-text-primary);
+  --color-card-text-secondary: var(--card-text-secondary);
+  --color-card-border: var(--card-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-suisse-regular: 
 }
 
-@media (prefers-color-scheme: dark) {
+@font-face {
+  font-family: 'Suisse-Intl-Medium';
+  src: url('../../public/fonts/fonnts.com-Suisse_Intl_Medium.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Graphik-Medium-Trial';
+  src: url('../../public/fonts/Graphik-Medium-Trial.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Suisse-Intl-Regular';
+  src: url('../../public/fonts/fonnts.com-Suisse_Intl_Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --animate-pulse: pulseOpacity 2s ease-out infinite;
+  }
+  
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: 'Suisse-Intl-Medium', Arial, Helvetica, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .graphik-text {
+    font-family: 'Graphik-Medium-Trial', Arial, Helvetica, sans-serif;
+  }
+
+  .suisse-text {
+    font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif;
+  }
+
+  .glow-hover {
+    transition: box-shadow 0.3s ease;
+  }
+
+  .glow-hover:hover {
+    box-shadow:
+      rgba(85, 102, 119, 0.5) 0px 0.60219px 1.56569px -0.8333px,
+      rgba(85, 102, 119, 0.5) 0px 2.288553px 5.95019px -1.6667px,
+      rgba(85, 102, 119, 0.5) 0px 10px 26px -2.5px;
+  }
+}
+
+@keyframes pulseOpacity {
+  0% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.5) translate(-33.33%, -33.33%);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1) translate(-50%, -50%);
+    opacity: 0.2;
+  }
 }
