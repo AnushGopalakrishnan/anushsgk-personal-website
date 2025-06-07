@@ -1,14 +1,13 @@
 import { getProject } from '@/sanity/lib/queries';
 import ProjectContent from './ProjectContent';
 
-interface PageProps {
-    params: {
-        slug: string;
-    };
-}
-
-export default async function ProjectPage({ params }: PageProps) {
-    const project = await getProject(params.slug);
+export default async function ProjectPage({
+    params,
+}: {
+    params: Promise<{ slug: string }>
+}) {
+    const { slug } = await params;
+    const project = await getProject(slug);
 
     if (!project) {
         return (
