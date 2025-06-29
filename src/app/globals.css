@@ -8,6 +8,9 @@
   --card-text-primary: rgb(155, 166, 179);
   --card-text-secondary: rgb(124, 158, 191);
   --card-border: rgba(86, 101, 116, 0.05);
+  --img-border:rgba(155, 166, 179, 0.2);
+  --inverted: #000;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,6 +22,8 @@
     --card-border: rgba(122, 119, 153, 0.1);
     --card-text-primary: rgb(155, 166, 179);
     --card-text-secondary: rgb(205, 201, 255);
+    --img-border:rgba(155, 166, 179, 0.2);
+    --inverted: #fff;
   }
 }
 
@@ -30,6 +35,7 @@
   --color-card-text-primary: var(--card-text-primary);
   --color-card-text-secondary: var(--card-text-secondary);
   --color-card-border: var(--card-border);
+  --color-img-border: var(--img-border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-suisse-regular: 

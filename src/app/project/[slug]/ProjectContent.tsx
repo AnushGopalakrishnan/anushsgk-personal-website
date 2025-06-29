@@ -17,7 +17,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
     const getGridClassName = () => {
         switch (layout) {
             case 'featured':
-                return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 [&>*:first-child]:md:col-span-2 [&>*:first-child]:md:row-span-2";
+                return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
             case 'grid':
                 return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
             case 'feed':
@@ -65,23 +65,30 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             </div>
 
             {/* Gallery grid */}
-            <div className={getGridClassName()}>
-                {project.galleryImages?.map((imageUrl, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="aspect-square relative overflow-hidden rounded-lg"
-                    >
-                        <img
-                            src={imageUrl}
-                            alt={`${project.title} gallery image ${index + 1}`}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </motion.div>
-                ))}
-            </div>
+            <motion.div layout transition={{
+    default: { ease: "linear" },
+    layout: { duration: 0.3 }
+  }} className={getGridClassName()}>
+                {project.galleryImages?.map((imageUrl, index) => {
+                    const featuredClass = layout === 'featured' && index === 0 ? 'md:col-span-2 md:row-span-2' : '';
+                    return (
+                        <motion.div
+                            key={index}
+                            layout
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ layout: { duration: 0.2, type: 'easeout' }, duration: 0.5, delay: index * 0.1 }}
+                            className={`aspect-square relative overflow-hidden rounded-lg ${featuredClass}`}
+                        >
+                            <img
+                                src={imageUrl}
+                                alt={`${project.title} gallery image ${index + 1}`}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                        </motion.div>
+                    );
+                })}
+            </motion.div>
 
             {/* Video section if available */}
             {project.video && (

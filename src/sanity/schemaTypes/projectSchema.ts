@@ -20,6 +20,16 @@ export default {
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
+      validation: (Rule:any) => Rule.required(),
+    },
+    {
       name: 'projectUrl',
       title: 'Project URL',
       type: 'url',

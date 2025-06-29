@@ -5,6 +5,7 @@ export interface Project {
     description: string;
     heroImage?: string;
     video?: string;
+    tags?: string[];
     galleryImages?: string[];
     projectUrl?: string;
 }
