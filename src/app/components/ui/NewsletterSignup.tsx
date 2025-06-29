@@ -2,7 +2,7 @@ import React from 'react';
 
 const NewsletterSignup = () => {
   return (
-    <div className="bg-white rounded-md p-4 md:p-6 shadow flex flex-col max-w-xl ml-8 mt-10 mb-4 border border-black/10">
+    <div className="bg-white rounded-md p-4 md:p-6 shadow flex flex-col max-w-[90vw] md:max-w-xl md:ml-8 ml-4 mt-10 mb-4 border border-black/10">
       <h2 className="text-xl md:text-2xl text-foreground mb-4" style={{ fontFamily: '"Graphik Medium", "Graphik Medium Placeholder", sans-serif', fontSize: '20px', lineHeight: '1.4em' }}>
         Sign up to my newsletter. No spam, promise.
       </h2>

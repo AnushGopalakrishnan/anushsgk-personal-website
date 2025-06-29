@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
@@ -54,6 +54,24 @@ const getIcon = (type: LayoutType, active: boolean) => {
 const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, layout, setLayout, tags }) => {
   const layoutTypes: LayoutType[] = ['grid', 'featured', 'feed'];
 
+  // Force feed layout on mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768 && layout !== 'feed') {
+        setLayout('feed');
+      }
+    };
+
+    // Check on mount
+    handleResize();
+
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, [layout, setLayout]);
+
   return (
     <div className="sticky top-0 z-20 bg-white flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>
       {/* Title on the left */}
@@ -61,8 +79,8 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, layout, se
         {title}
       </div>
 
-      {/* Layout controls centered */}
-      <div className="flex gap-2 flex-1 justify-center">
+      {/* Layout controls centered - hidden on mobile */}
+      <div className="hidden md:flex gap-2 flex-1 justify-center">
         {layoutTypes.map((layoutType) => (
           <button
             key={layoutType}
