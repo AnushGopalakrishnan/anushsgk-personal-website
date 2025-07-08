@@ -84,12 +84,9 @@ export default {
       client: 'client',
       media: 'heroImage',
     },
-    prepare(selection: { title: string; client?: string; media?: any }) {
-      const { title, client, media } = selection;
-      return {
-        title: client ? `${title} for ${client}` : title,
-        media,
-      };
-    },
+    prepare: (selection: any) => ({
+      title: `${selection.title} ${selection.client ? `(${selection.client})` : ''}`,
+      media: selection.media,
+    }),
   },
 }
