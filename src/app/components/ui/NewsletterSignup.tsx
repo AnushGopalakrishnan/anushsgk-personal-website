@@ -1,12 +1,34 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
+import { toast } from 'sonner';
+import { submitNewsletter } from '@/lib/newsletter';
 
 const NewsletterSignup = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await submitNewsletter(email);
+      toast.success('Successfully signed up for the newsletter!');
+      setEmail('');
+    } catch (error) {
+      toast.error('Failed to sign up for newsletter. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="bg-white rounded-md p-4 md:p-6 shadow flex flex-col max-w-[90vw] md:max-w-xl md:ml-8 ml-4 mt-10 mb-4 border border-black/10">
+    <div className="bg-background rounded-md p-4 md:p-6 shadow flex flex-col max-w-[90vw] md:max-w-xl ml-4 mt-10 mb-4 border border-foreground/20">
       <h2 className="text-xl md:text-2xl text-foreground mb-4" style={{ fontFamily: '"Graphik Medium", "Graphik Medium Placeholder", sans-serif', fontSize: '20px', lineHeight: '1.4em' }}>
         Sign up to my newsletter. No spam, promise.
       </h2>
-      <form className="w-full flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
         <div className="w-full">
           <label className="block w-full">
             
@@ -23,9 +45,12 @@ const NewsletterSignup = () => {
                   type="email"
                   required
                   name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email to keep up"
-                  className="w-full bg-transparent outline-none text-black placeholder-foreground/60 pl-10 pr-3 py-2 rounded-[10px] text-xs font-mono"
+                  className="w-full bg-transparent outline-none text-foreground placeholder-foreground/60 pl-10 pr-3 py-2 rounded-[10px] text-xs font-mono"
                   aria-label="Email address"
+                  disabled={isSubmitting}
                 />
               </div>
             </div>
@@ -33,10 +58,11 @@ const NewsletterSignup = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-foreground text-background text-sm font-medium rounded-[10px] py-2 transition focus:outline-none focus:ring-2 focus:ring-[rgb(124,158,191)] focus:ring-offset-2"
+          disabled={isSubmitting}
+          className="w-full bg-foreground text-background text-sm font-medium rounded-[10px] py-2 transition focus:outline-none focus:ring-2 focus:ring-[rgb(124,158,191)] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ fontFamily: '"Inter", "Inter Placeholder", sans-serif', fontSize: '14px', fontWeight: '500' }}
         >
-          Submit
+          {isSubmitting ? 'Signing up...' : 'Submit'}
         </button>
       </form>
       <p className="mt-4 text-foreground text-sm" style={{ fontFamily: '"Geist Regular", "Geist Regular Placeholder", sans-serif', fontSize: '14px', lineHeight: '1.4em' }}>

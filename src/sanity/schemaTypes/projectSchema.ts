@@ -10,6 +10,12 @@ export default {
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: 'client',
+      title: 'Client',
+      type: 'string',
+      validation: (Rule: any) => Rule.optional(),
+    },
+    {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -75,7 +81,15 @@ export default {
   preview: {
     select: {
       title: 'title',
+      client: 'client',
       media: 'heroImage',
+    },
+    prepare(selection: { title: string; client?: string; media?: any }) {
+      const { title, client, media } = selection;
+      return {
+        title: client ? `${title} for ${client}` : title,
+        media,
+      };
     },
   },
 }

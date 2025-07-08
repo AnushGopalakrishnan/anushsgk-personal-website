@@ -35,7 +35,8 @@ export async function getProjects() {
       "video": video.asset->url,
       "tags": tags[],
       "galleryImages": galleryImages[].asset->url,
-      projectUrl
+      projectUrl,
+      client
     }`,
     undefined,
     
@@ -52,7 +53,9 @@ export async function getProject(slug: string) {
       "heroImage": heroImage.asset->url,
       "video": video.asset->url,
       "tags": tags[],
-      "galleryImages": galleryImages[].asset->url
+      "galleryImages": galleryImages[].asset->url,
+      projectUrl,
+      client
     }`,
     { slug }
   )

@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useLayout } from './contexts/LayoutContext';
+import Arrow from './svg/arrow';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
 interface ProjectControlBarProps {
   title: string;
-  layout: LayoutType;
-  setLayout: (l: LayoutType) => void;
+  client?: string;
   tags?: string[];
+  projectUrl?: string;
 }
 
 const getIcon = (type: LayoutType, active: boolean) => {
@@ -51,32 +53,25 @@ const getIcon = (type: LayoutType, active: boolean) => {
   }
 };
 
-const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, layout, setLayout, tags }) => {
+const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, tags, projectUrl }) => {
+  const { layout, setLayout } = useLayout();
   const layoutTypes: LayoutType[] = ['grid', 'featured', 'feed'];
 
-  // Force feed layout on mobile
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768 && layout !== 'feed') {
-        setLayout('feed');
-      }
-    };
-
-    // Check on mount
-    handleResize();
-
-    // Add event listener
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup
-    return () => window.removeEventListener('resize', handleResize);
-  }, [layout, setLayout]);
-
   return (
-    <div className="sticky top-0 z-20 bg-white flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>
-      {/* Title on the left */}
-      <div className="font-graphik text-sm font-medium text-foreground flex-1 text-left opacity-80">
-        {title}
+    <div className="sticky top-0 z-20 bg-background flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>
+      {/* Title and client on the left */}
+      <div className="font-graphik text-sm font-medium text-foreground flex-1 text-left opacity-80 flex items-center gap-2 pl-2">
+        {client ? (
+          <span>{title} <span>for</span> {client}</span>
+        ) : (
+          <span>{title}</span>
+        )}
+        <a 
+          href={projectUrl}
+          className="group"
+        >
+          <Arrow hoverColor="var(--bg-foreground)" />
+        </a>
       </div>
 
       {/* Layout controls centered - hidden on mobile */}
@@ -86,7 +81,7 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, layout, se
             key={layoutType}
             onClick={() => setLayout(layoutType)}
             className={`w-9 h-9 flex items-center justify-center rounded transition-colors border-none outline-none ${
-              layout === layoutType ? 'text-primary' : 'text-foreground/60 hover:bg-foreground/10'
+              layout === layoutType ? 'text-foreground' : 'text-foreground/60 hover:bg-foreground/10'
             }`}
             aria-label={layoutType}
           >
@@ -101,7 +96,7 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, layout, se
           tags.map((tag, index) => (
             <span 
               key={index}
-              className="text-xs text-[#ADADAD] font-mono bg-black px-2 py-1 rounded"
+              className="text-xs text-foreground dark:text-foreground border border-foreground/20 font-mono bg-background dark:bg-background dark:border dark:border-solid dark:border-foreground/20 px-2 py-1 rounded mr-2"
             >
               {tag.toUpperCase()}
             </span>

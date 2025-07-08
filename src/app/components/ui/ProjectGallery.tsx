@@ -2,13 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import type { Project } from '@/types/sanity';
 import ProjectControlBar from '../ProjectControlBar';
+import { useLayout } from '../contexts/LayoutContext';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
 interface ProjectGalleryProps {
     project: Project;
-    layout: LayoutType;
-    setLayout: (layout: LayoutType) => void;
 }
 
 // Helper for grid class
@@ -25,7 +24,9 @@ const getGridClassName = (layout: LayoutType) => {
     }
 };
 
-export function ProjectGallery({ project, layout, setLayout }: ProjectGalleryProps) {
+export function ProjectGallery({ project }: ProjectGalleryProps) {
+    const { layout } = useLayout();
+    
     // Ensure hero image is first in the gallery
     const galleryImages = [
         ...(project.heroImage ? [project.heroImage] : []),
@@ -37,9 +38,9 @@ export function ProjectGallery({ project, layout, setLayout }: ProjectGalleryPro
             {/* Test sticky bar for debugging */}
             <ProjectControlBar
                 title={project.title}
-                layout={layout}
-                setLayout={setLayout}
+                client={project.client}
                 tags={project.tags}
+                projectUrl={project.projectUrl}
             />
             <div className="pt-16 pb-24 px-3 md:px-3 xl:px-3 bg-background w-full">
                 {/* Gallery grid */}
@@ -65,12 +66,12 @@ export function ProjectGallery({ project, layout, setLayout }: ProjectGalleryPro
                                     duration: 0.5, 
                                     delay: index * 0.1 
                                 }}
-                                className={`aspect-[478/319] relative border-img-border border solid overflow-hidden ${featuredClass} ${!isFeatured ? 'flex items-center justify-center' : ''}`}
+                                className={`aspect-[16/9] relative border-img-border border solid overflow-hidden ${featuredClass} ${!isFeatured ? 'flex items-center justify-center' : ''}`}
                             >
                                 <img
                                     src={imageUrl}
                                     alt={`${project.title} gallery image ${index + 1}`}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-contain"
                                 />
                             </motion.div>
                         );

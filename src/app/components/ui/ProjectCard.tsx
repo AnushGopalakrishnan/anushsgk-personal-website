@@ -44,11 +44,21 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                 {/* Bottom section with project info */}
                 <div className="px-6 md:px-8 xl:px-10 pb-6 md:pb-6 xl:pb-10">
                     <div className="flex justify-between items-end">
-                        <div className='flex items-center gap-2 group'>
+                        <div className='flex items-center gap-2'>
                             <h2 className="text-card-text-primary suisse-text text-sm md:text-xs xl:text-lg font-medium leading-tight tracking-tight">
-                                {project.title}
+                                {project.client ? `${project.title} for ${project.client}` : project.title}
                             </h2>
-                            <Arrow hoverColor="var(--bg-foreground)" />
+                            {project.projectUrl && (
+                                <a 
+                                    href={project.projectUrl} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="group"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <Arrow hoverColor="var(--bg-foreground)" />
+                                </a>
+                            )}
                         </div>
                         <div>
                             <span className="text-card-text-primary text-xs md:text-xs xl:text-base font-normal leading-tight tracking-tight">

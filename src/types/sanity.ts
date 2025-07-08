@@ -8,6 +8,7 @@ export interface Project {
     tags?: string[];
     galleryImages?: string[];
     projectUrl?: string;
+    client?: string;
 }
 
 export interface Profile {

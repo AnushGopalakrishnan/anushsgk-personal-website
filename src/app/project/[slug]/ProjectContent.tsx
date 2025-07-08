@@ -3,7 +3,7 @@
 import { Project } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useLayout } from '../../components/contexts/LayoutContext';
 
 interface ProjectContentProps {
     project: Project;
@@ -12,7 +12,7 @@ interface ProjectContentProps {
 type LayoutType = 'featured' | 'grid' | 'feed';
 
 export default function ProjectContent({ project }: ProjectContentProps) {
-    const [layout, setLayout] = useState<LayoutType>('featured');
+    const { layout, setLayout } = useLayout();
 
     const getGridClassName = () => {
         switch (layout) {
@@ -40,7 +40,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             {/* Project header */}
             <div className="mb-12">
                 <h1 className="text-4xl font-suisse text-foreground mb-4">
-                    {project.title}
+                    {project.client ? `${project.title} for ${project.client}` : project.title}
                 </h1>
                 <p className="text-foreground/80 font-suisse max-w-2xl">
                     {project.description}
