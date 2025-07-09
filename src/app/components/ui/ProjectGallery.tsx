@@ -8,6 +8,7 @@ type LayoutType = 'featured' | 'grid' | 'feed';
 
 interface ProjectGalleryProps {
     project: Project;
+    onLayoutControlBarClick?: () => void;
 }
 
 // Helper for grid class
@@ -24,7 +25,7 @@ const getGridClassName = (layout: LayoutType) => {
     }
 };
 
-export function ProjectGallery({ project }: ProjectGalleryProps) {
+export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGalleryProps) {
     const { layout } = useLayout();
     
     // Ensure hero image is first in the gallery
@@ -41,6 +42,7 @@ export function ProjectGallery({ project }: ProjectGalleryProps) {
                 client={project.client}
                 tags={project.tags}
                 projectUrl={project.projectUrl}
+                onLayoutControlBarClick={onLayoutControlBarClick}
             />
             <div className="pt-16 pb-24 px-3 md:px-3 xl:px-3 bg-background w-full">
                 {/* Gallery grid */}
