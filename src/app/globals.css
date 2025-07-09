@@ -185,6 +185,19 @@
     border-radius: 0.5rem;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   }
+  .yarl__captions_container {
+    font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+  }
+  
+  .yarl__caption {
+    font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif;
+    color: var(--foreground);
+    font-size: 1.125rem; /* text-lg */
+  }
+  .yarl__slide_title{
+    color:var(--foreground) !important;
+  }
 }
 
 @keyframes pulseOpacity {

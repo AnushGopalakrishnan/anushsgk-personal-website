@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Project } from '@/types/sanity';
 import ProjectControlBar from '../ProjectControlBar';
 import { useLayout } from '../contexts/LayoutContext';
+import Lightbox from 'yet-another-react-lightbox';
+import Captions from "yet-another-react-lightbox/plugins/captions";
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/styles.css";
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
@@ -27,6 +31,7 @@ const getGridClassName = (layout: LayoutType) => {
 
 export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGalleryProps) {
     const { layout } = useLayout();
+
     
     // Ensure hero image is first in the gallery
     const galleryImages = [
@@ -34,16 +39,23 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
         ...((project.galleryImages || []).filter((img) => img !== project.heroImage))
     ];
 
+    // Lightbox state
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [photoIndex, setPhotoIndex] = useState(0);
+
     return (
         <section className="w-full mt-20 mb-4 bg-background" style={{ minHeight: '120vh' }}>
-            {/* Test sticky bar for debugging */}
-            <ProjectControlBar
-                title={project.title}
-                client={project.client}
-                tags={project.tags}
-                projectUrl={project.projectUrl}
-                onLayoutControlBarClick={onLayoutControlBarClick}
-            />
+            {/* Add custom CSS for top captions */}
+            
+            <div className="w-full mb-4">
+                <ProjectControlBar
+                    title={project.title}
+                    client={project.client}
+                    tags={project.tags}
+                    projectUrl={project.projectUrl}
+                    onLayoutControlBarClick={onLayoutControlBarClick}
+                />
+            </div>
             <div className="pt-16 pb-24 px-3 md:px-3 xl:px-3 bg-background w-full">
                 {/* Gallery grid */}
                 <motion.div 
@@ -69,6 +81,8 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
                                     delay: index * 0.1 
                                 }}
                                 className={`aspect-[16/9] relative border-img-border border solid overflow-hidden ${featuredClass} ${!isFeatured ? 'flex items-center justify-center' : ''}`}
+                                onClick={() => { setLightboxOpen(true); setPhotoIndex(index); }}
+                                style={{ cursor: 'pointer' }}
                             >
                                 <img
                                     src={imageUrl}
@@ -79,7 +93,16 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
                         );
                     })}
                 </motion.div>
+                {/* Lightbox */}
+                <Lightbox
+                    open={lightboxOpen}
+                    plugins={[Captions]}
+                    close={() => setLightboxOpen(false)}
+                    slides={galleryImages.map((src) => ({ src, title: project.title, description: project.client }))}
+                    index={photoIndex}
+                    on={{ view: ({ index }) => setPhotoIndex(index) }}
+                />
             </div>
         </section>
     );
-} 
+}
