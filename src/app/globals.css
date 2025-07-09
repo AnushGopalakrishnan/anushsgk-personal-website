@@ -197,6 +197,8 @@
   }
   .yarl__slide_title{
     color:var(--foreground) !important;
+    transition: none !important;
+    animation: none !important;
   }
 }
 
