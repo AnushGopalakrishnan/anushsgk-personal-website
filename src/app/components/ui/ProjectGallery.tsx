@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import type { Project } from '@/types/sanity';
 import ProjectControlBar from '../ProjectControlBar';
 import { useLayout } from '../contexts/LayoutContext';
-import Lightbox from 'yet-another-react-lightbox';
-import Captions from "yet-another-react-lightbox/plugins/captions";
-import "yet-another-react-lightbox/styles.css";
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
 interface ProjectGalleryProps {
     project: Project;
     onLayoutControlBarClick?: () => void;
+    onImageClick?: (imageIndex: number) => void;
 }
 
 // Helper for grid class
@@ -28,7 +26,7 @@ const getGridClassName = (layout: LayoutType) => {
     }
 };
 
-export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGalleryProps) {
+export function ProjectGallery({ project, onLayoutControlBarClick, onImageClick }: ProjectGalleryProps) {
     const { layout } = useLayout();
 
     
@@ -38,36 +36,8 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
         ...((project.galleryImages || []).filter((img) => img !== project.heroImage))
     ];
 
-    // Lightbox state
-    const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [photoIndex, setPhotoIndex] = useState(0);
-
     return (
         <section className="w-full mt-20 mb-4 bg-background" style={{ minHeight: '120vh' }}>
-            {/* Add custom CSS for top captions */}
-            <style jsx>{`
-                .custom-lightbox-title-toolbar {
-                    position: fixed !important;
-                    top: 0 !important;
-                    left: 0 !important;
-                    right: 0 !important;
-                    width: 100vw !important;
-                    background: rgba(0,0,0,0.5) !important;
-                    padding: 16px 24px !important;
-                    font-size: 18px !important;
-                    font-weight: 600 !important;
-                    color: white !important;
-                    pointer-events: none !important;
-                    backdrop-filter: blur(8px) !important;
-                    text-align: center !important;
-                    z-index: 1000 !important;
-                }
-                
-                .yarl__slide_title {
-                    display: none !important;
-                }
-            `}</style>
-            
             <div className="w-full mb-4">
                 <ProjectControlBar
                     title={project.title}
@@ -92,7 +62,7 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
                         const featuredClass = isFeatured ? 'md:col-span-2 md:row-span-2' : '';
                         return (
                             <motion.div
-                                key={index}
+                                key={`${project._id}-${index}`}
                                 layout
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -102,7 +72,7 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
                                     delay: index * 0.1 
                                 }}
                                 className={`aspect-[16/9] relative border-img-border border solid overflow-hidden ${featuredClass} ${!isFeatured ? 'flex items-center justify-center' : ''}`}
-                                onClick={() => { setLightboxOpen(true); setPhotoIndex(index); }}
+                                onClick={() => onImageClick?.(index)}
                                 style={{ cursor: 'pointer' }}
                             >
                                 <img
@@ -114,48 +84,6 @@ export function ProjectGallery({ project, onLayoutControlBarClick }: ProjectGall
                         );
                     })}
                 </motion.div>
-                {/* Lightbox */}
-                <Lightbox
-                    open={lightboxOpen}
-                    plugins={[Captions]}
-                    close={() => setLightboxOpen(false)}
-                    slides={galleryImages.map((src) => ({ src }))}
-                    index={photoIndex}
-                    on={{ view: ({ index }) => setPhotoIndex(index) }}
-                    render={{
-                        buttonClose: () => (
-                            <>
-                                <div className="custom-lightbox-title-toolbar">
-                                    {project.title}
-                                </div>
-                                <button
-                                    type="button"
-                                    className="yarl__button"
-                                    onClick={() => setLightboxOpen(false)}
-                                    style={{ 
-                                        position: 'absolute',
-                                        top: '16px',
-                                        right: '16px',
-                                        zIndex: 1001,
-                                        
-                                        border: 'none',
-                                        borderRadius: '50%',
-                                        width: '40px',
-                                        height: '40px',
-                                        color: 'white',
-                                        fontSize: '18px',
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    ×
-                                </button>
-                            </>
-                        )
-                    }}
-                />
             </div>
         </section>
     );
