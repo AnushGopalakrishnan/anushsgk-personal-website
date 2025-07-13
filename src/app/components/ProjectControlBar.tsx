@@ -2,7 +2,7 @@ import React from 'react';
 import { useLayout } from './contexts/LayoutContext';
 import Arrow from './svg/arrow';
 
-type LayoutType = 'featured' | 'grid' | 'feed';
+type LayoutType = 'featured' | 'grid';
 
 interface ProjectControlBarProps {
   title: string;
@@ -43,20 +43,12 @@ const getIcon = (type: LayoutType, active: boolean) => {
       <rect x="16" y="16" width="7" height="7" rx="1" fill="currentColor" opacity={opacity} />
     </svg>
         );
-    case 'feed':
-      return (
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          {[0, 8, 16].map((y, i) => (
-            <rect key={i} x="0" y={y} width="24" height="6" fill="currentColor" opacity={opacity} />
-          ))}
-        </svg>
-      );
   }
 };
 
 const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, tags, projectUrl, onLayoutControlBarClick }) => {
   const { layout, setLayout } = useLayout();
-  const layoutTypes: LayoutType[] = ['grid', 'featured', 'feed'];
+  const layoutTypes: LayoutType[] = ['grid', 'featured'];
   console.log(tags); 
   return (
     <div className="sticky top-0 z-20 bg-background flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>

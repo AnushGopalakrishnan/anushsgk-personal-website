@@ -11,6 +11,9 @@ import NewsletterSignup from './ui/NewsletterSignup';
 import Lightbox from 'yet-another-react-lightbox';
 import Captions from "yet-another-react-lightbox/plugins/captions";
 import "yet-another-react-lightbox/styles.css";
+import { LeftArrowIcon } from './svg/left-arrow';
+import { RightArrowIcon } from './svg/right-arrow';
+import { CloseButton } from './svg/close-button';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
@@ -92,19 +95,77 @@ function HomeContent({ profile, projects }: HomeContentProps) {
                     left: 0 !important; 
                     right: 0 !important;
                     width: 100vw !important;
-                    background: rgba(0,0,0,0.5) !important;
+                    background: color-mix(in srgb, var(--background) 70%, transparent) !important;
                     padding: 16px 24px !important;
                     font-size: 18px !important;
                     font-weight: 600 !important;
-                    color: white !important;
+                    font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif !important;
+                    color: var(--foreground) !important;
                     pointer-events: none !important;
                     backdrop-filter: blur(8px) !important;
                     text-align: center !important;
                     z-index: 1000 !important;
+                    border-bottom: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent) !important;
                 }
                 
                 .yarl__slide_title {
                     display: none !important;
+                }
+
+                /* Lightbox overlay background */
+                .yarl__overlay {
+                    background: color-mix(in srgb, var(--background) 90%, transparent) !important;
+                }
+
+                /* Lightbox container */
+                .yarl__container {
+                    background: transparent !important;
+                }
+
+                /* Lightbox slide */
+                .yarl__slide {
+                    background: var(--background) !important;
+                }
+                
+                
+
+                /* Lightbox navigation buttons */
+            
+
+                
+
+                /* Lightbox captions */
+                .yarl__captions_container {
+                    background: color-mix(in srgb, var(--background) 70%, transparent) !important;
+                    backdrop-filter: blur(8px) !important;
+                    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent) !important;
+                }
+
+                .yarl__caption {
+                    color: var(--foreground) !important;
+                    font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif !important;
+                }
+
+                /* Lightbox counter */
+                .yarl__counter {
+                    color: var(--foreground) !important;
+                    background: color-mix(in srgb, var(--background) 70%, transparent) !important;
+                    backdrop-filter: blur(8px) !important;
+                    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent) !important;
+                }
+
+                /* Lightbox thumbnails */
+                .yarl__thumbnails_container {
+                    background: color-mix(in srgb, var(--background) 80%, transparent) !important;
+                    backdrop-filter: blur(8px) !important;
+                }
+
+                .yarl__thumbnail {
+                    border: 2px solid color-mix(in srgb, var(--foreground) 20%, transparent) !important;
+                }
+
+                .yarl__thumbnail_active {
+                    border-color: var(--foreground) !important;
                 }
             `}</style>
 
@@ -153,25 +214,27 @@ function HomeContent({ profile, projects }: HomeContentProps) {
                                 onClick={() => setLightboxOpen(false)}
                                 style={{ 
                                     position: 'absolute',
-                                    top: '16px',
-                                    right: '16px',
+                                    top: '2px',
+                                    right: '24px',
                                     zIndex: 1001,
-                                    border: 'none',
                                     borderRadius: '50%',
-                                    width: '40px',
-                                    height: '40px',
-                                    color: 'white',
-                                    fontSize: '18px',
+                                    width: '56px',
+                                    height: '56px',
+                                    color: 'var(--foreground)',
+                                    fontSize: '32px',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center'
                                 }}
+                                aria-label="Close lightbox"
                             >
-                                ×
+                                <CloseButton width={32} height={32} fill="currentColor" />
                             </button>
                         </>
-                    )
+                    ),
+                    iconPrev: () => <LeftArrowIcon width={32} height={32} fill="currentColor" />, 
+                    iconNext: () => <RightArrowIcon width={32} height={32} fill="currentColor" />
                 }}
             />
         </div>

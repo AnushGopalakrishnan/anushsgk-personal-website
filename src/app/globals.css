@@ -189,6 +189,26 @@
     font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif;
     color: var(--foreground);
   }
+
+  .yarl__slide_current{
+    background: var(--background) !important;
+  }
+  .yarl_slide{
+    background: var(--background) !important;
+  }
+  .yarl__carousel_with_slides{
+    background: var(--background) !important;
+  }
+
+  .yarl__button{
+    filter: none !important;
+  }
+
+  .yarl__navigation_prev,
+.yarl__navigation_next {
+  color: var(--foreground) !important;
+  background-color: none;
+}
   
   .yarl__caption {
     font-family: 'Suisse-Intl-Regular', Arial, Helvetica, sans-serif;
