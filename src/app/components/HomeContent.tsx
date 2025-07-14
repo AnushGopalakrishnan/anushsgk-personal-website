@@ -172,7 +172,7 @@ function HomeContent({ profile, projects }: HomeContentProps) {
             {/* Fixed background text */}
             {/* Sliding sheet */}
             <motion.main 
-                className="flex flex-col items-center w-full bg-background min-h-screen relative z-10"
+                className="flex flex-col items-center w-full bg-background min-h-[70vh] relative z-10"
                 
             >
                 {/* Hero Section */}

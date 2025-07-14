@@ -37,7 +37,7 @@ export function ProjectGallery({ project, onLayoutControlBarClick, onImageClick 
     ];
 
     return (
-        <section className="w-full mt-20 mb-4 bg-background" style={{ minHeight: '120vh' }}>
+        <section className="w-full mb-4 bg-background">
             <div className="w-full mb-4">
                 <ProjectControlBar
                     title={project.title}

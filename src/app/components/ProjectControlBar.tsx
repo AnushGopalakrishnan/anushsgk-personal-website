@@ -54,18 +54,28 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, ta
   return (
     <div className="sticky top-0 z-20 bg-background flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>
       {/* Title and client on the left */}
-      <div className="font-graphik text-sm font-medium text-foreground flex-1 text-left opacity-80 flex items-center gap-2 pl-2">
-        <a 
-          href={projectUrl}
-          className="group flex items-center gap-2"
-        >
-          {client ? (
-            <span>{title} <span>for</span> {client}</span>
-          ) : (
-            <span>{title}</span>
-          )}
-          <Arrow hoverColor="var(--bg-foreground)" />
-        </a>
+      <div className="font-graphik text-sm font-medium text-foreground flex-1 text-left opacity-80 flex items-center pl-2">
+        {projectUrl ? (
+          <a 
+            href={projectUrl}
+            className="group flex items-center gap-2"
+          >
+            {client ? (
+              <span>{title} <span>for</span> {client}</span>
+            ) : (
+              <span>{title}</span>
+            )}
+            <Arrow hoverColor="var(--bg-foreground)" />
+          </a>
+        ) : (
+          <div className="flex items-center gap-2">
+            {client ? (
+              <span>{title} <span>for</span> {client}</span>
+            ) : (
+              <span>{title}</span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Layout controls centered - hidden on mobile */}
@@ -88,7 +98,7 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, ta
       </div>
 
       {/* Tags on the right */}
-      <div className="flex-1 flex justify-end gap-2">
+      <div className="flex-1 flex justify-end">
         {tags && tags.length > 0 ? (
           tags.map((tag, index) => (
             <span 
