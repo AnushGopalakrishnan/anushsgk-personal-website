@@ -17,6 +17,7 @@ interface LayoutProviderProps {
 
 export function LayoutProvider({ children }: LayoutProviderProps) {
   const [layout, setLayout] = useState<LayoutType>('featured');
+  const [hydrated, setHydrated] = useState(false);
 
   // Load layout from localStorage on mount
   useEffect(() => {
@@ -24,6 +25,7 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
     if (savedLayout && ['featured', 'grid', 'feed'].includes(savedLayout)) {
       setLayout(savedLayout as LayoutType);
     }
+    setHydrated(true);
   }, []);
 
   // Save layout to localStorage whenever it changes
@@ -56,7 +58,7 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
 
   return (
     <LayoutContext.Provider value={value}>
-      {children}
+      {hydrated ? children : null}
     </LayoutContext.Provider>
   );
 }

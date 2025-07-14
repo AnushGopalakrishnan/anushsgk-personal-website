@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         
         const { data, error } = await resend.emails.send({
             from: 'Contact Form <notifications@belbullets.run>',
-            to: ['avnishjha1005@gmail.com'],
+            to: ['hello@anushgopalakrishnan.com'],
             subject: `New Contact Form Submission from ${name}`,
             html: `
                 <h2>New Contact Form Submission</h2>
