@@ -48,21 +48,22 @@ const getIcon = (type: LayoutType, active: boolean) => {
 
 const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, tags, projectUrl, onLayoutControlBarClick }) => {
   const { layout, setLayout } = useLayout();
-  const layoutTypes: LayoutType[] = ['grid', 'featured'];
+  // Swap the order so 'featured' comes first
+  const layoutTypes: LayoutType[] = ['featured', 'grid'];
   console.log(tags); 
   return (
     <div className="sticky top-0 z-20 bg-background flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>
       {/* Title and client on the left */}
       <div className="font-graphik text-sm font-medium text-foreground flex-1 text-left opacity-80 flex items-center gap-2 pl-2">
-        {client ? (
-          <span>{title} <span>for</span> {client}</span>
-        ) : (
-          <span>{title}</span>
-        )}
         <a 
           href={projectUrl}
-          className="group"
+          className="group flex items-center gap-2"
         >
+          {client ? (
+            <span>{title} <span>for</span> {client}</span>
+          ) : (
+            <span>{title}</span>
+          )}
           <Arrow hoverColor="var(--bg-foreground)" />
         </a>
       </div>
@@ -76,7 +77,7 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, ta
               if (onLayoutControlBarClick) onLayoutControlBarClick();
               setLayout(layoutType);
             }}
-            className={`w-9 h-9 flex items-center justify-center rounded transition-colors border-none outline-none ${
+            className={`w-9 h-9 flex items-center justify-center rounded transition-colors border-none outline-none cursor-pointer ${
               layout === layoutType ? 'text-foreground' : 'text-foreground/60 hover:bg-foreground/10'
             }`}
             aria-label={layoutType}
