@@ -21,10 +21,6 @@ export async function getProfile() {
       }
     }`,
     undefined,
-    {
-      cache: 'force-cache',
-      next: { tags: [profileCacheTag] }
-    }
   )
 }
 
@@ -37,14 +33,13 @@ export async function getProjects() {
       description,
       "heroImage": heroImage.asset->url,
       "video": video.asset->url,
+      "tags": tags[]->title,
       "galleryImages": galleryImages[].asset->url,
-      projectUrl
+      projectUrl,
+      client
     }`,
     undefined,
-    {
-      cache: 'force-cache',
-      next: { tags: [projectsCacheTag] }
-    }
+    
   )
 }
 
@@ -57,7 +52,10 @@ export async function getProject(slug: string) {
       description,
       "heroImage": heroImage.asset->url,
       "video": video.asset->url,
-      "galleryImages": galleryImages[].asset->url
+      "tags": tags[]->title,
+      "galleryImages": galleryImages[].asset->url,
+      projectUrl,
+      client
     }`,
     { slug }
   )

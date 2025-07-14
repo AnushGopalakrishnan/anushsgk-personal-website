@@ -3,7 +3,7 @@
 import { Project } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useLayout } from '../../components/contexts/LayoutContext';
 
 interface ProjectContentProps {
     project: Project;
@@ -12,12 +12,12 @@ interface ProjectContentProps {
 type LayoutType = 'featured' | 'grid' | 'feed';
 
 export default function ProjectContent({ project }: ProjectContentProps) {
-    const [layout, setLayout] = useState<LayoutType>('featured');
+    const { layout, setLayout } = useLayout();
 
     const getGridClassName = () => {
         switch (layout) {
             case 'featured':
-                return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 [&>*:first-child]:md:col-span-2 [&>*:first-child]:md:row-span-2";
+                return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
             case 'grid':
                 return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
             case 'feed':
@@ -40,7 +40,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             {/* Project header */}
             <div className="mb-12">
                 <h1 className="text-4xl font-suisse text-foreground mb-4">
-                    {project.title}
+                    {project.client ? `${project.title} for ${project.client}` : project.title}
                 </h1>
                 <p className="text-foreground/80 font-suisse max-w-2xl">
                     {project.description}
@@ -65,23 +65,30 @@ export default function ProjectContent({ project }: ProjectContentProps) {
             </div>
 
             {/* Gallery grid */}
-            <div className={getGridClassName()}>
-                {project.galleryImages?.map((imageUrl, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="aspect-square relative overflow-hidden rounded-lg"
-                    >
-                        <img
-                            src={imageUrl}
-                            alt={`${project.title} gallery image ${index + 1}`}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </motion.div>
-                ))}
-            </div>
+            <motion.div layout transition={{
+    default: { ease: "linear" },
+    layout: { duration: 0.3 }
+  }} className={getGridClassName()}>
+                {project.galleryImages?.map((imageUrl, index) => {
+                    const featuredClass = layout === 'featured' && index === 0 ? 'md:col-span-2 md:row-span-2' : '';
+                    return (
+                        <motion.div
+                            key={index}
+                            layout
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ layout: { duration: 0.2, type: 'easeout' }, duration: 0.5, delay: index * 0.1 }}
+                            className={`aspect-square relative overflow-hidden rounded-lg ${featuredClass}`}
+                        >
+                            <img
+                                src={imageUrl}
+                                alt={`${project.title} gallery image ${index + 1}`}
+                                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                        </motion.div>
+                    );
+                })}
+            </motion.div>
 
             {/* Video section if available */}
             {project.video && (

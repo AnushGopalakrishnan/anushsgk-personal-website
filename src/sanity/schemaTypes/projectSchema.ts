@@ -10,6 +10,12 @@ export default {
       validation: (Rule: any) => Rule.required(),
     },
     {
+      name: 'client',
+      title: 'Client',
+      type: 'string',
+      validation: (Rule: any) => Rule.optional(),
+    },
+    {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -18,6 +24,16 @@ export default {
         maxLength: 96,
       },
       validation: (Rule: any) => Rule.required(),
+    },
+    {
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'tag' }] }],
+      options: {
+        layout: 'tags',
+      },
+      validation: (Rule:any) => Rule.required(),
     },
     {
       name: 'projectUrl',
@@ -65,7 +81,12 @@ export default {
   preview: {
     select: {
       title: 'title',
+      client: 'client',
       media: 'heroImage',
     },
+    prepare: (selection: any) => ({
+      title: `${selection.title} ${selection.client ? `(${selection.client})` : ''}`,
+      media: selection.media,
+    }),
   },
 }
