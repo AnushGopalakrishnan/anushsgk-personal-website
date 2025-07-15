@@ -23,21 +23,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // For now, we'll use a simple approach with a third-party service
-        // You can choose from several options:
-        
-        // Option 1: Use Resend (recommended - free tier available)
-        // Option 2: Use EmailJS (client-side, no backend needed)
-        // Option 3: Use a form service like Formspree or Netlify Forms
-        
-        // For this example, I'll show you how to set up with Resend
-        // First, install: npm install resend
-        // Then uncomment the code below and add your Resend API key to .env.local
-        
-        
-        
         const resend = new Resend(process.env.RESEND_API_KEY);
-        
         const { data, error } = await resend.emails.send({
             from: 'Contact Form <notifications@belbullets.run>',
             to: ['hello@anushgopalakrishnan.com'],
@@ -58,22 +44,12 @@ export async function POST(request: NextRequest) {
                 { status: 500 }
             );
         }
-        
 
-        // For now, let's just log the submission (you can replace this with actual email sending)
-        console.log('Contact form submission:', { name, email, message });
-
-        // Return success response
-        return NextResponse.json(
-            { message: 'Message sent successfully' },
-            { status: 200 }
-        );
-
-    } catch (error) {
-        console.error('Contact form error:', error);
+        return NextResponse.json({ success: true });
+    } catch (err) {
         return NextResponse.json(
             { error: 'Internal server error' },
             { status: 500 }
         );
     }
-} 
+}

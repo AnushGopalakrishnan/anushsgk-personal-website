@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import type { Project } from '@/types/sanity';
 import Arrow from '../svg/arrow';
 import { LazyVideo } from './LazyVideo';
+import { urlForWebp } from '@/sanity/lib/image';
 
 interface ProjectCardProps {
     project: Project;
@@ -29,7 +30,7 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
                             />
                         ) : project.heroImage && (
                             <Image 
-                                src={project.heroImage}
+                                src={urlForWebp(project.heroImage).url()}
                                 alt={project.title}
                                 className="object-cover transition-all duration-700 ease-out"
                                 fill

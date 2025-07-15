@@ -4,6 +4,7 @@ import { Project } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useLayout } from '../../components/contexts/LayoutContext';
+import { urlForWebp } from '@/sanity/lib/image';
 
 interface ProjectContentProps {
     project: Project;
@@ -81,7 +82,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
                             className={`aspect-square relative overflow-hidden rounded-lg ${featuredClass}`}
                         >
                             <img
-                                src={imageUrl}
+                                src={urlForWebp(imageUrl).url()}
                                 alt={`${project.title} gallery image ${index + 1}`}
                                 className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                             />

@@ -19,7 +19,6 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
   const [layout, setLayout] = useState<LayoutType>('featured');
   const [hydrated, setHydrated] = useState(false);
 
-  // Load layout from localStorage on mount
   useEffect(() => {
     const savedLayout = localStorage.getItem('project-layout');
     if (savedLayout && ['featured', 'grid', 'feed'].includes(savedLayout)) {
@@ -28,26 +27,18 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
     setHydrated(true);
   }, []);
 
-  // Save layout to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('project-layout', layout);
   }, [layout]);
 
-  // Force feed layout on mobile
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768 && layout !== 'feed') {
         setLayout('feed');
       }
     };
-
-    // Check on mount
     handleResize();
-
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, [layout]);
 
@@ -58,15 +49,15 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
 
   return (
     <LayoutContext.Provider value={value}>
-      {hydrated ? children : null}
+      {children}
     </LayoutContext.Provider>
   );
 }
 
 export function useLayout() {
   const context = useContext(LayoutContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useLayout must be used within a LayoutProvider');
   }
   return context;
-} 
+}

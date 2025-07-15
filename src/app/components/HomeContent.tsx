@@ -14,6 +14,7 @@ import "yet-another-react-lightbox/styles.css";
 import { LeftArrowIcon } from './svg/left-arrow';
 import { RightArrowIcon } from './svg/right-arrow';
 import { CloseButton } from './svg/close-button';
+import { urlForWebp } from '@/sanity/lib/image';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
@@ -33,17 +34,12 @@ interface GalleryItem {
 function HomeContent({ profile, projects }: HomeContentProps) {
     const { textRef, fontSize, yPos, rotateX, zoom } = useScrollAnimations();
     const { getPlaceholderColumnSpan, shouldShowPlaceholder } = usePlaceholderLogic();
-    // --- New logic for scroll-to-active-project ---
     const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
     const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
-    // Get layout from context (shared)
     const { layout } = require('./contexts/LayoutContext').useLayout();
-
-    // Lightbox state moved to parent
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [photoIndex, setPhotoIndex] = useState(0);
 
-    // Create unified gallery from all projects
     const unifiedGallery: GalleryItem[] = projects.flatMap((project) => {
         const galleryImages = [
             ...(project.heroImage ? [project.heroImage] : []),
@@ -51,7 +47,7 @@ function HomeContent({ profile, projects }: HomeContentProps) {
         ];
         
         return galleryImages.map((imageUrl, index) => ({
-            src: imageUrl,
+            src: urlForWebp(imageUrl).url(),
             projectId: project._id,
             projectTitle: project.title,
             imageIndex: index
@@ -64,7 +60,6 @@ function HomeContent({ profile, projects }: HomeContentProps) {
         }
     }, [layout]);
 
-    // Function to open lightbox from a specific project and image
     const openLightboxFromProject = (projectId: string, imageIndex: number) => {
         const globalIndex = unifiedGallery.findIndex(
             item => item.projectId === projectId && item.imageIndex === imageIndex
@@ -75,7 +70,6 @@ function HomeContent({ profile, projects }: HomeContentProps) {
         }
     };
 
-    // Get current project info for lightbox title
     const getCurrentProjectInfo = () => {
         if (photoIndex >= 0 && photoIndex < unifiedGallery.length) {
             return unifiedGallery[photoIndex];
@@ -87,7 +81,6 @@ function HomeContent({ profile, projects }: HomeContentProps) {
 
     return (
         <div className="relative md:min-h-[185vh] xl:min-h-[150vh]">
-            {/* Add custom CSS for top captions */}
             <style jsx>{`
                 .custom-lightbox-title-toolbar {
                     position: fixed !important;
@@ -169,8 +162,6 @@ function HomeContent({ profile, projects }: HomeContentProps) {
                 }
             `}</style>
 
-            {/* Fixed background text */}
-            {/* Sliding sheet */}
             <motion.main 
                 className="flex flex-col items-center w-full bg-background min-h-[70vh] relative z-10"
                 

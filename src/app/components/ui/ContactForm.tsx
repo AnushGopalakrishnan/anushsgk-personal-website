@@ -23,7 +23,6 @@ export function ContactForm() {
         setIsSubmitting(true);
 
         try {
-            // Submit to contact API route for email sending
             const response = await fetch('/api/contact', {
                 method: 'POST',
                 headers: {
@@ -36,7 +35,6 @@ export function ContactForm() {
                 }),
             });
 
-            // Also submit to Google Apps Script for storing in sheets
             await submitContact(formData.name, formData.email, formData.message);
 
             if (response.ok) {
@@ -46,7 +44,6 @@ export function ContactForm() {
             }
             
             setFormData({ name: '', email: '', message: '' });
-            // Close the modal after successful submission
             const modal = document.getElementById('contact-modal') as HTMLDialogElement;
             modal?.close();
         } catch (error) {
@@ -153,4 +150,4 @@ export function ContactForm() {
             </dialog>
         </div>
     );
-} 
+}
