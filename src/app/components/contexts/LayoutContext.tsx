@@ -17,7 +17,7 @@ interface LayoutProviderProps {
 
 export function LayoutProvider({ children }: LayoutProviderProps) {
   const [layout, setLayout] = useState<LayoutType>('featured');
-  const [hydrated, setHydrated] = useState(false);
+  const [hydrated, setHydrated] = useState(false);  
 
   useEffect(() => {
     const savedLayout = localStorage.getItem('project-layout');
@@ -49,7 +49,7 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
 
   return (
     <LayoutContext.Provider value={value}>
-      {children}
+      {hydrated ? children : null}
     </LayoutContext.Provider>
   );
 }
