@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
         const resend = new Resend(process.env.RESEND_API_KEY);
         const { data, error } = await resend.emails.send({
-            from: 'Contact Form <notifications@belbullets.run>',
+            from: 'Contact Form <notifications@anushgopalakrishnan.com>',
             to: ['hello@anushgopalakrishnan.com'],
             subject: `New Contact Form Submission from ${name}`,
             html: `
