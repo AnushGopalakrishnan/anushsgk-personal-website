@@ -4,6 +4,8 @@ import type { Project } from '@/types/sanity';
 import ProjectControlBar from '../ProjectControlBar';
 import { useLayout } from '../contexts/LayoutContext';
 import { urlForWebp } from '@/sanity/lib/image';
+import Image from 'next/image';
+import { getSanityImageSrcSet, defaultSanityImageSizes } from '@/sanity/lib/image';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
@@ -78,8 +80,11 @@ export function ProjectGallery({ project, onLayoutControlBarClick, onImageClick 
                             >
                                 <img
                                     src={urlForWebp(imageUrl).url()}
+                                    srcSet={getSanityImageSrcSet(imageUrl)}
+                                    sizes={defaultSanityImageSizes}
                                     alt={`${project.title} gallery image ${index + 1}`}
                                     className="w-full h-full object-contain"
+                                    loading="lazy"
                                 />
                             </motion.div>
                         );
