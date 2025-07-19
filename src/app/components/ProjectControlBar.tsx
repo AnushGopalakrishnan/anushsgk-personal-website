@@ -49,8 +49,7 @@ const getIcon = (type: LayoutType, active: boolean) => {
 const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, tags, projectUrl, onLayoutControlBarClick }) => {
   const { layout, setLayout } = useLayout();
   // Swap the order so 'featured' comes first
-  const layoutTypes: LayoutType[] = ['featured', 'grid'];
-  console.log(tags); 
+  const layoutTypes: LayoutType[] = ['featured', 'grid']; 
   return (
     <div className="sticky top-0 z-20 bg-background flex items-center justify-between px-2 py-2" style={{ minHeight: 56 }}>
       {/* Title and client on the left */}
@@ -116,4 +115,4 @@ const ProjectControlBar: React.FC<ProjectControlBarProps> = ({ title, client, ta
   );
 };
 
-export default ProjectControlBar;
+export default ProjectControlBar; 

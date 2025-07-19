@@ -21,11 +21,38 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
 
   useEffect(() => {
     const savedLayout = localStorage.getItem('project-layout');
+    const isMobile = window.innerWidth < 768;
+    
     if (savedLayout && ['featured', 'grid', 'feed'].includes(savedLayout)) {
-      setLayout(savedLayout as LayoutType);
+      // If we have a saved layout, use it but respect mobile/desktop constraints
+      if (isMobile && savedLayout !== 'feed') {
+        setLayout('feed');
+      } else if (!isMobile && savedLayout === 'feed') {
+        setLayout('featured');
+      } else {
+        setLayout(savedLayout as LayoutType);
+      }
+    } else {
+      // If no saved layout or invalid value, set default based on screen size
+      const defaultLayout = isMobile ? 'feed' : 'featured';
+      setLayout(defaultLayout);
+      localStorage.setItem('project-layout', defaultLayout);
     }
     setHydrated(true);
   }, []);
+
+  // Prevent layout changes during initial hydration to avoid flicker
+  const [initialHydrationComplete, setInitialHydrationComplete] = useState(false);
+  
+  useEffect(() => {
+    if (hydrated) {
+      // Small delay to ensure all components have rendered with the initial layout
+      const timer = setTimeout(() => {
+        setInitialHydrationComplete(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [hydrated]);
 
   useEffect(() => {
     localStorage.setItem('project-layout', layout);
@@ -33,14 +60,21 @@ export function LayoutProvider({ children }: LayoutProviderProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768 && layout !== 'feed') {
-        setLayout('feed');
+      if (initialHydrationComplete) {
+        if (window.innerWidth < 768 && layout !== 'feed') {
+          setLayout('feed');
+        } else if (window.innerWidth >= 768 && layout === 'feed') {
+          // When switching back to desktop, default to 'featured' if we were on 'feed'
+          setLayout('featured');
+        }
       }
     };
-    handleResize();
+    if (initialHydrationComplete) {
+      handleResize();
+    }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [layout]);
+  }, [layout, initialHydrationComplete]);
 
   const value = {
     layout,

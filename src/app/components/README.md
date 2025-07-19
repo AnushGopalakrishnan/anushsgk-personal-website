@@ -15,9 +15,7 @@ components/
 │   ├── HeroSection.tsx       # Main hero section
 │   ├── BackgroundText.tsx    # Animated background text
 │   ├── ProjectGallery.tsx    # Project gallery with controls
-│   ├── ComingSoonPlaceholder.tsx # Placeholder component
 │   ├── LazyVideo.tsx         # Lazy loading video component
-│   ├── ProjectCard.tsx       # Individual project card
 │   └── index.ts              # Component exports
 ├── utils/                    # Utility functions
 │   └── layoutUtils.ts        # Layout calculation utilities
@@ -43,9 +41,7 @@ components/
 - `HeroSection`: Self-contained hero section
 - `BackgroundText`: Animated background text
 - `ProjectGallery`: Complete project gallery with controls
-- `ComingSoonPlaceholder`: Reusable placeholder
 - `LazyVideo`: Optimized video loading
-- `ProjectCard`: Individual project display
 
 ### 4. **Clean Imports**
 - Index files provide clean import paths
