@@ -15,6 +15,9 @@ import { LeftArrowIcon } from './svg/left-arrow';
 import { RightArrowIcon } from './svg/right-arrow';
 import { CloseButton } from './svg/close-button';
 import { urlForWebp } from '@/sanity/lib/image';
+import { useLayout } from './contexts/LayoutContext';
+import { useLightbox } from '@/app/components/hooks/useLightbox';
+import { ProjectSections } from '@/app/components/ProjectSections';
 
 type LayoutType = 'featured' | 'grid' | 'feed';
 
@@ -36,48 +39,23 @@ function HomeContent({ profile, projects }: HomeContentProps) {
     const { getPlaceholderColumnSpan, shouldShowPlaceholder } = usePlaceholderLogic();
     const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
     const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
-    const { layout } = require('./contexts/LayoutContext').useLayout();
-    const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [photoIndex, setPhotoIndex] = useState(0);
-
-    const unifiedGallery: GalleryItem[] = projects.flatMap((project) => {
-        const galleryImages = [
-            ...(project.heroImage ? [project.heroImage] : []),
-            ...((project.galleryImages || []).filter((img) => img !== project.heroImage))
-        ];
-        
-        return galleryImages.map((imageUrl, index) => ({
-            src: urlForWebp(imageUrl).url(),
-            projectId: project._id,
-            projectTitle: project.title,
-            imageIndex: index
-        }));
-    });
+    const { layout } = useLayout();
+    // Use custom hook for lightbox logic
+    const {
+        lightboxOpen,
+        setLightboxOpen,
+        photoIndex,
+        setPhotoIndex,
+        unifiedGallery,
+        currentProject,
+        openLightboxFromProject
+    } = useLightbox(projects);
 
     useEffect(() => {
         if (activeProjectId && sectionRefs.current[activeProjectId]) {
             sectionRefs.current[activeProjectId]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [layout]);
-
-    const openLightboxFromProject = (projectId: string, imageIndex: number) => {
-        const globalIndex = unifiedGallery.findIndex(
-            item => item.projectId === projectId && item.imageIndex === imageIndex
-        );
-        if (globalIndex !== -1) {
-            setPhotoIndex(globalIndex);
-            setLightboxOpen(true);
-        }
-    };
-
-    const getCurrentProjectInfo = () => {
-        if (photoIndex >= 0 && photoIndex < unifiedGallery.length) {
-            return unifiedGallery[photoIndex];
-        }
-        return null;
-    };
-
-    const currentProject = getCurrentProjectInfo();
 
     return (
         <div className="relative md:min-h-[185vh] xl:min-h-[150vh]">
@@ -170,18 +148,12 @@ function HomeContent({ profile, projects }: HomeContentProps) {
                 <HeroSection />
             </motion.main>
             {/* Project Galleries as siblings, each in their own section */}
-            {projects.map((project) => (
-                <section
-                    key={project._id}
-                    ref={el => { sectionRefs.current[project._id] = el; }}
-                >
-                    <ProjectGallery
-                        project={project}
-                        onLayoutControlBarClick={() => setActiveProjectId(project._id)}
-                        onImageClick={(imageIndex) => openLightboxFromProject(project._id, imageIndex)}
-                    />
-                </section>
-            ))}
+            <ProjectSections
+                projects={projects}
+                sectionRefs={sectionRefs}
+                setActiveProjectId={setActiveProjectId}
+                openLightboxFromProject={openLightboxFromProject}
+            />
             {/* Render NewsletterSignup at the bottom */}
             <NewsletterSignup />
 
@@ -190,7 +162,7 @@ function HomeContent({ profile, projects }: HomeContentProps) {
                 open={lightboxOpen}
                 plugins={[Captions]}
                 close={() => setLightboxOpen(false)}
-                slides={unifiedGallery.map((item) => ({ src: item.src }))}
+                slides={unifiedGallery.map((item: GalleryItem) => ({ src: item.src }))}
                 index={photoIndex}
                 on={{ view: ({ index }) => setPhotoIndex(index) }}
                 render={{
